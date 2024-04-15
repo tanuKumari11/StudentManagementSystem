@@ -5,7 +5,7 @@ A Full Stack Web Application built with Node.js, Express.js, MongoDB and Bootstr
 
 # Modules
 
-  - A powerful Login and Authentication System - Role based authentication and authorization.
+  - A powerful Login .
   - Student Details – Displays the details of all the students, and provides following services:
         a. Adding a new student.
         b. Editing / Modifying the data of an existing student.
