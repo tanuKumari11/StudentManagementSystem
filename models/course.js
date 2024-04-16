@@ -42,7 +42,7 @@ const courseSchema = new mongoose.Schema({
 const Course = mongoose.model('Course', courseSchema);
 
 function validateCourse(course) {
-    const schema = {
+    const schema = Joi.object({
         departmentName: Joi.string().required().label(' Department Name '),
         courseName: Joi.string().required().label('Course Name'),
         courseDuration: Joi.number().required().label('Course Duration'),
@@ -50,10 +50,11 @@ function validateCourse(course) {
         endDate: Joi.date().required().label('Course End Date'),
         courseFee: Joi.number().required().label('Course Fee '),
         intake: Joi.number().required().label('Course Intake ')
-    }
+    });
 
-    return Joi.validate(course, schema);
+    return schema.validate(course);
 }
+
 
 exports.Course = Course;
 exports.validateCourse = validateCourse;
