@@ -8,6 +8,8 @@ const passport = require('passport');
 const path = require('path');
 const mongoose = require('mongoose');
 const breadcrumb = require('express-url-breadcrumb');
+const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
+const handlebars = require('handlebars'); // Import handlebars module
 
 // Assuming these route files exist and are properly set up
 const students = require('./routes/students');
@@ -23,7 +25,7 @@ const app = express();
 require('./config/passport')(passport);
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/student-mgmt-sys', {
+mongoose.connect('mongodb://127.0.0.1:27017/student-mgmt-sys', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
@@ -31,11 +33,17 @@ mongoose.connect('mongodb://localhost:27017/student-mgmt-sys', {
 .catch(err => console.error('Error occurred connecting to MongoDB...', err));
 
 // Load Helpers
-const { paginate, select, if_eq, select_course } = require('./helpers/customHelpers');
 const { ensureAuthenticated, isLoggedIn } = require('./helpers/auth');
+const {
+  paginate,
+  select,
+  if_eq,
+  select_course
+} = require('./helpers/customHelpers');
 
 // Express Handlebars Middleware
-app.engine('handlebars', exphbs.engine({
+const hbs = exphbs.create({
+  handlebars: allowInsecurePrototypeAccess(handlebars), // Use handlebars here
   helpers: {
     paginate,
     select,
@@ -43,9 +51,12 @@ app.engine('handlebars', exphbs.engine({
     select_course
   },
   defaultLayout: 'main' // Assuming 'main.handlebars' is your default layout
-}));
+});
+
+app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', './views');
+
 
 // Static Folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -116,3 +127,5 @@ app.use('/uploads', uploads);
 // Listening on Port
 const port = process.env.PORT || 5000; // Fixed environment variable name and fallback port
 app.listen(port, () => console.log(`Server started on port : ${port}`));
+
+// Define the select helper

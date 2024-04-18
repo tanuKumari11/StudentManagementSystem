@@ -1,21 +1,41 @@
 <div class="container-fluid" id="container-fluid">
   <div class="row mb-3">
-    <div class="col-md-10"></div>
+    <div class="col-md-10">
+      {{! <button type="button" class="btn btn-secondary custom-button" data-toggle="modal" data-target="#importCSV">
+                <i class="fa fa-file-text-o fa-lg"></i>&nbsp; Import from CSV
+            </button>
+            <button type="button" id="btnManage" class="btn btn-secondary">Manage</button>
+            <div class="btn-group" id="btnGroup" role="group" aria-label="Basic example">
+                <button type="button" id="left" class="btn btn-secondary">All</button>
+                <button type="button" id="right" class="btn btn-secondary">None</button>
+            </div>
+            <button type="button" id="btnDel" class="btn btn-danger">Delete</button> }}
+    </div>
     <div class="col-md-2">
       <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Sort By &nbsp; <i class="fa fa-sort fa-lg"></i>
+        <button
+          class="btn btn-secondary"
+          type="button"
+          id="dropdownMenuButton"
+          data-toggle="dropdown"
+          style="width:100%;text-align:right;"
+        >
+          Sort By &nbsp;
+          <i class="fa fa-sort fa-lg"></i>
         </button>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="/students?sort=asc">Ascending</a>
-          <a class="dropdown-item" href="/students?sort=desc">Descending</a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="/students?sort=asc">
+            Ascending
+          </a>
+          <a class="dropdown-item" href="/students?sort=desc">
+            Descending
+          </a>
         </div>
       </div>
     </div>
   </div>
 
   {{#if students}}
-
     <table class="table table-striped">
       <thead class="thead-dark">
         <tr>
@@ -30,56 +50,75 @@
         </tr>
       </thead>
       <tbody>
-     {{#each students }}
-    <tr>
-   
-        <td>{{StudentId.ClassRollNo}}</td>
-        <td>{{StudentName.FirstName}} {{StudentName.LastName}}</td>
-        <td>{{Gender}}</td>
-        <td>{{DateOfAdmission}}</td>
-        <td>{{PhoneNumber}}</td>
-        <td>
-            {{Address.Address_Line_1}}, {{Address.City}}, {{Address.State}},
-            {{Address.PostalCode}}, {{Address.Country}}
-        </td>
-        <td>{{Class}}</td>
-        <td></td>
-       
-    </tr>
- {{/each}}
-
+        {{#each students}}
+          <tr>
+            <td>{{StudentId.ClassRollNo}}</td>
+            <td>{{StudentName.FirstName}}&nbsp;{{StudentName.LastName}}</td>
+            <td>{{Gender}}</td>
+            <td>{{DateOfAdmission}}</td>
+            <td>{{PhoneNumber}}</td>
+            <td>{{Address.Address_Line_1}}</td>
+            <td>{{Class}}</td>
+            <td>
+              <div class="dropdown" id="customized-dropdown">
+                <button
+                  type="button"
+                  class="btn btn-default"
+                  data-toggle="dropdown"
+                >
+                  <i class="fa fa-ellipsis-v"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right animated fadeIn">
+                  <li class="edit-item">
+                    <a class="dropdown-item" href="/students/edit?id={{id}}">
+                      Edit
+                    </a>
+                  </li>
+                  <li class="view-item">
+                    <a class="dropdown-item" href="/students/details?id={{id}}">
+                      View
+                    </a>
+                  </li>
+                  <li class="del-item">
+                    <a
+                      href="#"
+                      class="dropdown-item"
+                      onclick="deleteItem('/students/{{id}}');"
+                    >Delete</a>
+                  </li>
+                </div>
+              </div>
+            </td>
+          </tr>
+        {{/each}}
       </tbody>
     </table>
+
+    {{#unless user.privileges.update}}
+      <script>
+        let updateItems = document.getElementsByClassName('edit-item'), count;
+        for (count = 0; count < updateItems.length; count++) {
+        updateItems[count].style.display = 'none'; }
+      </script>
+    {{/unless}}
+
+    {{#unless user.privileges.delete}}
+      <script>
+        let items = document.getElementsByClassName("del-item"), i; for (i = 0;
+        i < items.length; i++) { items[i].style.display = 'none'; }
+      </script>
+    {{/unless}}
+
+    <br />
+
     <ul class="pagination">
-      {{#paginate current=current pages=pages}} {{/paginate}} </ul>
+      {{#paginate current=current pages=pages}}{{/paginate}}
+    </ul>
   {{else}}
     <p>No records found...</p>
   {{/if}}
 </div>
 
-
-{{#unless user.privileges.update}}
-<script>
-    let updateItems = document.getElementsByClassName('edit-item'), count;
-
-    for (count = 0; count < updateItems.length; count++) {
-        updateItems[count].style.display = 'none';
-    }
-</script>
-{{/unless}}
-
-{{#unless user.privileges.delete}}
-<script>
-    let items = document.getElementsByClassName("del-item"), i;
-
-    for (i = 0; i < items.length; i++) {
-        items[i].style.display = 'none';
-    }
-</script>
-{{/unless}}
-
 <a href="/students/add" class="float">
-    <i class="fa fa-plus my-float"></i>
+  <i class="fa fa-plus my-float"></i>
 </a>
-
-
