@@ -10,18 +10,12 @@ A Full Stack Web Application built with Node.js, Express.js, MongoDB and Bootstr
         a. Adding a new student.
         b. Editing / Modifying the data of an existing student.
         c. Deleting / Removing the data of an existing student.
-
-  - Course Details – Lis the details of all the courses available in the institution, and provides following services:
-        a. Adding a new course.
-        b. Editing an existing course.
-        c. Deleting a course.
   - Fee Details.
   - Marks and Grades.
   - Attendance.
 
 ### Technology Stack Used
 
-This project uses a number of open source tools, technologies and frameworks to work properly:
 
 * [Visual Studio Code](https://code.visualstudio.com) - A code editor redefined and optimized for building and debugging modern web and cloud applications. 
 * [node.js](https://www.nodejs.org) - Evented I/O for the backend. Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.
@@ -31,11 +25,6 @@ This project uses a number of open source tools, technologies and frameworks to 
 
 ### Installation
 
-This project requires [Node.js](https://nodejs.org/) v10+ to run.
-
-Install the dependencies and devDependencies and start the server.
-
-```sh
 $ cd student-management-system
 $ npm install -d
 $ nodemon
