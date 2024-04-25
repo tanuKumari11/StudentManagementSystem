@@ -43,10 +43,21 @@ router.post('/signin', isLoggedIn, (req, res, next) => {
 });
 
 // Signout Route
+// Signout Route
 router.get('/signout', [ensureAuthenticated], (req, res) => {
-    req.logout();
-    req.flash('success_msg', 'You have successfully signed out of the application.');
-    res.redirect('/users/signin');
+    req.logout((err) => {
+        if (err) {
+            // Handle error if logout fails
+            console.error(err);
+            // Redirect or respond with an error message
+            req.flash('error_msg', 'Failed to logout.');
+            res.redirect('/users/signin');
+            return;
+        }
+        // If logout succeeds
+        req.flash('success_msg', 'You have successfully signed out of the application.');
+        res.redirect('/users/signin');
+    });
 });
 
 // GET Signup Route.
